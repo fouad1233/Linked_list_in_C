@@ -54,6 +54,41 @@ Node *addNode(int data)//returns the address of the added node
 }
 
 //to remove a node from the list
+/*
+head -> 1 -> 2 -> 3 if we want to remove element 2
+head -> 1 /2/ -> 3
+        |________|
+
+track the prevuious pointer and make it point to the next of the node to be deleted
+than free the node to be deleted
+*But if current node is the head node, we need to make the head point to the next of the current node
+*/
+int removeNode(int data)
+{
+    Node *current = head;//current is a pointer to the current node
+    Node *prev = head;//prev is a pointer to the previous node
+    while (current!=NULL){
+        //find the first node equal to the data
+        if (current->data == data){
+            if (current== head){
+                //if current node is the list head
+                head = current -> next;
+                free(current);
+                current = NULL;
+            }else
+            {
+                prev->next = current->next;
+                free(current);
+                current = NULL;
+            }
+            return 1;//return 1 if the node is found and deleted
+            
+        }
+        prev = current;
+        current = current->next;
+    }
+    return 0;//return 0 if the node is not found
+}
 
 //insert a node into a position in the list
 
@@ -98,6 +133,14 @@ int main(int argc, char **argv) {
                 break;
             case 2:
                 //remove operation
+                printf("Enter the data you want to remove from the list\n");
+                scanf("%d", &option);
+                int success = removeNode(option);
+                if (!success)
+                {
+                    printf("Element not found\n");
+                }
+                
                 break;
             case 3:
                 //insert operation
