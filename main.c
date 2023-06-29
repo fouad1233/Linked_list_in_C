@@ -19,8 +19,8 @@ Node *addNode(int data)//returns the address of the added node
     so it is better to add a node to the beginning of the list
     How to do this? 
     just allocate a new node and point the next of this node to the head and point the head to this node
-
-    head--/-- First node
+                head
+    *head--/-- First node
         |          |
         |-- Second node
     So its just cost O(1) time and does not depend on the number of nodes in the list
@@ -54,10 +54,10 @@ Node *addNode(int data)//returns the address of the added node
 }
 
 //to remove a node from the list
-/*
-head -> 1 -> 2 -> 3 if we want to remove element 2
-head -> 1 /2/ -> 3
-        |________|
+/*      head
+*head -> 1 -> 2 -> 3 if we want to remove element 2
+*head -> 1 /2/ -> 3
+         |________|
 
 track the prevuious pointer and make it point to the next of the node to be deleted
 than free the node to be deleted
@@ -91,7 +91,34 @@ int removeNode(int data)
 }
 
 //insert a node into a position in the list
-
+/*          head
+    *head -> 1 -> 2 -> 3 if we want to insert element 4 after element 2 what shold we do??
+    *head -> 1 -> 2 -/> 3  point the next of 4 to 3 and point the next of 2 to 4 
+                  |__4__|
+*/
+Node *insertNode(int data , int position){
+    Node *current = head;//current is a pointer to the current node
+    while (current !=NULL && position != 0)
+    {
+        
+        position--;
+    }
+    if (position != 0)
+    {
+        printf("Error: Invalid position, too far into list \n");
+        return NULL;
+    }
+    Node *new = malloc(sizeof(Node));//allocate a new node and return the address of the node
+    if (new == NULL)
+    {
+        printf("Error: Memory allocation failed\n");
+        return NULL;
+    }
+    new->data = data;//set the data of the node
+    new->next = current->next;//point the next of the new node to the next of the current node
+    current->next = new;//point the next of the current node to the new node
+    return new;
+}
 //print operation
 void printList()
 {
@@ -117,6 +144,8 @@ void printMenu()
 
 int main(int argc, char **argv) {
     int option = -1;
+    int arg = 0;
+    int arg2 = 0;
     while (option != 5)
     {
         printMenu();
@@ -128,14 +157,14 @@ int main(int argc, char **argv) {
             case 1:
                 //add operation
                 printf("Enter the data you want to add to the list\n");
-                scanf("%d", &option);
-                Node *new = addNode(option);
+                scanf("%d", &arg);
+                Node *new = addNode(arg);
                 break;
             case 2:
                 //remove operation
                 printf("Enter the data you want to remove from the list\n");
-                scanf("%d", &option);
-                int success = removeNode(option);
+                scanf("%d", &arg);
+                int success = removeNode(arg);
                 if (!success)
                 {
                     printf("Element not found\n");
@@ -144,6 +173,13 @@ int main(int argc, char **argv) {
                 break;
             case 3:
                 //insert operation
+                printf("Enter the data you want to insert to the list\n");
+                scanf("%d", &arg);
+                printf("Enter the positon\n");
+                scanf("%d", &arg2);
+                new = insertNode(option, arg2);
+                if (new == NULL)
+                    printf("Failed to insert into list\n");
                 break;
             case 4:
                 //print operation
